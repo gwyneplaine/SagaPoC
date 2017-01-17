@@ -39407,7 +39407,7 @@
 		    page = query.page;
 
 		// Here we should parse the key value pairs in our query object.
-		// Ater which they should be categorically passed into the selectors we've set up for extracting the appropraite values.
+		// Ater which they should be categorically passed into the selectors we've set up for extracting the appropriate values.
 		// For example columnsParser(column), would extract and return the relevant column values from the current list.
 
 		var columns = (0, _parsers.columnParser)(query.columns, currentList);
@@ -39513,10 +39513,8 @@
 
 						columns = active.columns;
 						search = active.search;
-						// let filters = parametizeFilters(active.filters);
-
 						filters = active.filters;
-						// console.log(filters);
+
 
 						if (page === 1) page = undefined;
 
@@ -39668,15 +39666,11 @@
 	 * @param  {Object} location       The current location object
 	 */
 	function composeQueryParams(params, location) {
-		console.log(location.query);
 		if (!location) return;
 		var newParams = Object.assign({}, location.query);
 		// Stringify nested objects inside the parameters
 		Object.keys(params).forEach(function (i) {
 			if (params[i]) {
-				if (params[i] == 'search') {
-					console.log(params[i]);
-				}
 				newParams[i] = params[i];
 				if (_typeof(newParams[i]) === 'object') {
 					newParams[i] = JSON.stringify(newParams[i]);
@@ -112326,7 +112320,6 @@
 					currentPage: payload.currentPage
 				});
 			case 'SET_ACTIVE_COLUMNS':
-				console.log('SET_ACTIVE_COLUMNS', payload);
 				return _extends({}, state, {
 					columns: payload.columns
 				});
@@ -112576,6 +112569,7 @@
 			_this.setColumns = _this.setColumns.bind(_this);
 			_this.setCurrentPage = _this.setCurrentPage.bind(_this);
 			_this.setSort = _this.setSort.bind(_this);
+			_this.clearAllFilters = _this.clearAllFilters.bind(_this);
 			return _this;
 		}
 
@@ -112622,14 +112616,12 @@
 		}, {
 			key: 'setSearch',
 			value: function setSearch() {
-				console.log('SETTING SEARCH');
 				var searchParams = _faker2.default.random.word();
 				this.props.setSearch(searchParams);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				console.log(this.props.active.columns);
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -112726,7 +112718,7 @@
 					),
 					_react2.default.createElement(
 						'button',
-						null,
+						{ onClick: this.clearAllFilters },
 						'CLEAR ALL FILTERS'
 					)
 				);
@@ -112761,6 +112753,9 @@
 			},
 			setActiveList: function setActiveList(list, id, initial) {
 				return dispatch((0, _active.setActiveList)(list, id, initial));
+			},
+			clearAllFilters: function clearAllFilters() {
+				return dispatch((0, _active.clearAllFilters)());
 			}
 		};
 	};
@@ -112861,8 +112856,6 @@
 	function columnParser(columns, currentList) {
 		// Extract column data from the current list.
 		// return the result.
-		console.log('CURRENT LIST', currentList);
-		console.log(columns);
 		if (!columns) return;
 
 		return columns;

@@ -34,7 +34,7 @@ function parseQueryParams (query, currentList) {
 	const { search, filters, page } = query;
 
 	// Here we should parse the key value pairs in our query object.
-	// Ater which they should be categorically passed into the selectors we've set up for extracting the appropraite values.
+	// Ater which they should be categorically passed into the selectors we've set up for extracting the appropriate values.
 	// For example columnsParser(column), would extract and return the relevant column values from the current list.
 
 	const columns = columnParser(query.columns, currentList);
@@ -50,6 +50,13 @@ function parseQueryParams (query, currentList) {
 }
 
 function * loadItems () {
+	// Moved Load items into a generator.
+	// If your implementation revolves around api services that are consumed within app state,
+	// You can access it using a selector and call the method
+
+	// i.e. const loadItems = yield select(state => state.active.currentList.loadItems)
+	// yield call(loadItems, ARGUMENTS);
+
 	while (true) {
 		yield take('LOAD_ITEMS');
 		yield put({ type: 'LOADING_ITEMS' });
@@ -75,9 +82,8 @@ function * updateQueryParams () {
 	let columns = active.columns;
 
 	let search = active.search;
-	// let filters = parametizeFilters(active.filters);
+	
 	let filters = active.filters;
-	// console.log(filters);
 
 	if (page === 1) page = undefined;
 
@@ -102,6 +108,12 @@ function * updateQueryParams () {
 
 
 function * rootSaga () {
+	// Significantly simplified forks here.
+	// I don't need to worry about using order to conditionally allow certain actions.
+	// Because processes  triggered by actions from UI never cross with processes generated from actions occuring due to lifecycle triggers.
+
+	// the use of takeLatest also allows us to easily deal with race conditions, and latency related failures.
+
 	yield fork(loadItems);
 	yield fork(takeLatest, ['SET_ACTIVE_LIST'], evalQueryParams);
 	yield fork(takeLatest, [

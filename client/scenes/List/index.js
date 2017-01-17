@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import faker from 'faker';
 
-import { setActiveList, setActiveFilter, setActiveSort, setActiveColumns, setCurrentPage, setActiveSearch } from '../../actions/active';
+import { setActiveList, setActiveFilter, setActiveSort, setActiveColumns, setCurrentPage, setActiveSearch, clearAllFilters } from '../../actions/active';
 
 const colvar1 = ['name', 'id'];
 const colvar2 = ['lastCreatedAt', 'lastUpdatedAt'];
@@ -16,6 +16,7 @@ class List extends Component {
 		this.setColumns = this.setColumns.bind(this);
 		this.setCurrentPage = this.setCurrentPage.bind(this);
 		this.setSort = this.setSort.bind(this);
+		this.clearAllFilters = this.clearAllFilters.bind(this);
 	}
 	componentWillMount () {
 		const { listId }  = this.props.params;
@@ -44,12 +45,10 @@ class List extends Component {
 		this.props.setCurrentPage(currentPage);
 	}
 	setSearch () {
-		console.log('SETTING SEARCH');
 		const searchParams = faker.random.word();
 		this.props.setSearch(searchParams);
 	}
 	render () {
-		console.log(this.props.active.columns);
 		return (
 			<div>
 				<ul>
@@ -69,7 +68,7 @@ class List extends Component {
 						<li>{`Columns: ${this.props.active.columns}`}</li>
 					</ul>
 				</div>
-				<button>CLEAR ALL FILTERS</button>
+				<button onClick={this.clearAllFilters}>CLEAR ALL FILTERS</button>
 			</div>
 		);
 	}
@@ -88,7 +87,8 @@ const mapDispatchToProps = dispatch => {
 		setSearch: (search) => { return dispatch(setActiveSearch(search)) },
 		setCurrentPage: (page) => { return dispatch(setCurrentPage(page)) },
 		setColumns: (columns) => { return dispatch(setActiveColumns(columns)) },
-		setActiveList: (list, id, initial) => { return dispatch(setActiveList(list, id, initial))}
+		setActiveList: (list, id, initial) => { return dispatch(setActiveList(list, id, initial))},
+		clearAllFilters: () => { return dispatch(clearAllFilters()) }
 	}
 }
 

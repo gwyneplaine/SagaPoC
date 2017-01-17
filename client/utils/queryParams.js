@@ -65,15 +65,11 @@ export function stringifyColumns (columns, defaultColumnPaths) {
  * @param  {Object} location       The current location object
  */
 export function composeQueryParams (params, location) {
-	console.log(location.query);
 	if (!location) return;
 	const newParams = Object.assign({}, location.query);
 	// Stringify nested objects inside the parameters
 	Object.keys(params).forEach(i => {
 		if (params[i]) {
-			if(params[i] == 'search') {
-				console.log(params[i]);
-			}
 			newParams[i] = params[i];
 			if (typeof newParams[i] === 'object') {
 				newParams[i] = JSON.stringify(newParams[i]);

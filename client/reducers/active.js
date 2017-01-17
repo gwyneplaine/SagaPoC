@@ -27,7 +27,6 @@ function active (state = initialState, { type, payload }) {
 				currentPage: payload.currentPage,
 			}
 		case 'SET_ACTIVE_COLUMNS':
-			console.log('SET_ACTIVE_COLUMNS', payload);
 			return {
 				...state,
 				columns: payload.columns,
